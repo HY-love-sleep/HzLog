@@ -9,6 +9,7 @@ import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.EventHandlerGroup;
 import com.lmax.disruptor.dsl.ProducerType;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,7 @@ import javax.annotation.PostConstruct;
  * Date: 2024/1/9
  */
 @Component
+@Slf4j
 public class LogDisruptor {
     private Disruptor<LogMessage> disruptor;
 
@@ -38,7 +40,7 @@ public class LogDisruptor {
         this.disruptor = new Disruptor<LogMessage>(
             new LogMessageFactory(),
                 1024 * 1024,
-                new LogThreadFactory(),
+                new LogThreadFactory("LOG"),
                 ProducerType.SINGLE,
                 new BlockingWaitStrategy()
         );
@@ -48,8 +50,10 @@ public class LogDisruptor {
         logMessageEventHandlerGroup.then(senderHandler);
 
         this.disruptor.start();
+        log.info("Disruptor init success!");
     }
 
+    //todo: 是单例创建的吗
     public Disruptor<LogMessage> getDisruptor() {
         return this.disruptor;
     }
