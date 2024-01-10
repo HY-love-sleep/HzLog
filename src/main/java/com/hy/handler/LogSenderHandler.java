@@ -1,6 +1,6 @@
 package com.hy.handler;
 
-import com.hy.entity.LogMessage;
+import com.hy.entity.DBLogMessage;
 import com.lmax.disruptor.EventHandler;
 import org.springframework.stereotype.Component;
 
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
  */
 // todo: 不通类型日志对应不同模板，可应用策略模式实现
 @Component
-public class LogSenderHandler implements EventHandler<LogMessage> {
+public class LogSenderHandler implements EventHandler<DBLogMessage> {
 
     @Override
-    public void onEvent(LogMessage logMessage, long l, boolean b) throws Exception {
+    public void onEvent(DBLogMessage originLogMessage, long l, boolean b) throws Exception {
 
     }
 }

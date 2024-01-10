@@ -7,7 +7,7 @@ import java.io.Serializable;
  * Author: yhong
  * Date: 2024/1/9
  */
-public class LogMessage implements Serializable {
+public class OriginLogMessage implements Serializable {
     private static final long serialVersionUID = 1L;
 
     String originLogMessage;

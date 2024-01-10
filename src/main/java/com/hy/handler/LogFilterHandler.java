@@ -1,6 +1,6 @@
 package com.hy.handler;
 
-import com.hy.entity.LogMessage;
+import com.hy.entity.OriginLogMessage;
 import com.lmax.disruptor.EventHandler;
 import org.springframework.stereotype.Component;
 
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
  * Date: 2024/1/9
  */
 @Component
-public class LogFilterHandler implements EventHandler<LogMessage> {
+public class LogFilterHandler implements EventHandler<OriginLogMessage> {
 
     @Override
-    public void onEvent(LogMessage logMessage, long l, boolean b) throws Exception {
+    public void onEvent(OriginLogMessage originLogMessage, long l, boolean b) throws Exception {
 
     }
 }
