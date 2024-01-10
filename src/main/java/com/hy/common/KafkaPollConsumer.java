@@ -9,6 +9,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,20 @@ import java.util.Properties;
 @Slf4j
 @Component
 public class KafkaPollConsumer {
+    @Value("${spring.kafka.bootstrap.servers}")
+    private String servers;
+    @Value("${spring.kafka.group.id}")
+    private String groupId;
+    @Value("${spring.kafka.max.poll.records}")
+    private String maxPollRecords;
+    @Value("${spring.kafka.key.deserializer}")
+    private String keyDeserializer;
+    @Value("${spring.kafka.value.deserializer}")
+    private String valueDeserializer;
+
+    @Value("${spring.kafka.topic}")
+    private String topic;
+
     private KafkaConsumer<String, String> consumer;
 
     @Autowired
@@ -46,13 +61,13 @@ public class KafkaPollConsumer {
     public void initializeConsumer() {
         Properties props = new Properties();
         // 配置Kafka连接属性
-        props.put("bootstrap.servers", "192.168.174.132:9092");
-        props.put("group.id", "log-info-group");
-        props.put("max.poll.records", "500"); // 设置每次拉取的最大记录数为100
-        props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        props.put("bootstrap.servers", servers);
+        props.put("group.id", groupId);
+        props.put("max.poll.records", maxPollRecords); // 设置每次拉取的最大记录数为100
+        props.put("key.deserializer", keyDeserializer);
+        props.put("value.deserializer", valueDeserializer);
         this.consumer = new KafkaConsumer<>(props);
-        consumer.subscribe(Collections.singletonList("log-info"));
+        consumer.subscribe(Collections.singletonList(topic));
     }
 
 
