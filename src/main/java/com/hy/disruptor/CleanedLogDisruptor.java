@@ -44,4 +44,8 @@ public class CleanedLogDisruptor {
         this.disruptor.start();
         log.info("CleanedLogDisruptor init success!");
     }
+
+    public Disruptor<DBLogMessage> getDisruptor() {
+        return this.disruptor;
+    }
 }

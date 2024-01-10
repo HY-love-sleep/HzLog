@@ -1,4 +1,4 @@
-package com.hy.kafka;
+package com.hy.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hy.disruptor.OriginLogDisruptor;
