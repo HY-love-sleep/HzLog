@@ -19,5 +19,5 @@ spring:
     port: 9200
     schema: http
     username: elastic
-    passwd: elastic
+    passwd: 971122
     index: dbAudit
