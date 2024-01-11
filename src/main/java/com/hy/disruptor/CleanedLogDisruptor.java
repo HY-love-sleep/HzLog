@@ -1,7 +1,9 @@
 package com.hy.disruptor;
 
 import com.hy.entity.DBLogMessage;
+import com.hy.entity.LogEvent;
 import com.hy.factory.DBLogMessageFactory;
+import com.hy.factory.LogEventFactory;
 import com.hy.factory.LogThreadFactory;
 import com.hy.handler.LogSenderHandler;
 import com.lmax.disruptor.BlockingWaitStrategy;
@@ -24,7 +26,7 @@ public class CleanedLogDisruptor {
 
     @Autowired
     private LogSenderHandler logSenderHandler;
-    private Disruptor<DBLogMessage> disruptor;
+    private Disruptor<LogEvent> disruptor;
 
     public CleanedLogDisruptor() {
         this.disruptor = null;
@@ -32,8 +34,8 @@ public class CleanedLogDisruptor {
 
     @PostConstruct
     public void init() {
-        this.disruptor = new Disruptor<DBLogMessage>(
-                new DBLogMessageFactory(),
+        this.disruptor = new Disruptor<LogEvent>(
+                new LogEventFactory(),
                 1024 * 1024,
                 new LogThreadFactory("CleanedLOG"),
                 ProducerType.MULTI,
@@ -45,7 +47,7 @@ public class CleanedLogDisruptor {
         log.info("CleanedLogDisruptor init success!");
     }
 
-    public Disruptor<DBLogMessage> getDisruptor() {
+    public Disruptor<LogEvent> getDisruptor() {
         return this.disruptor;
     }
 }

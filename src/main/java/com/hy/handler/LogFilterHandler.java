@@ -1,7 +1,9 @@
 package com.hy.handler;
 
+import com.hy.common.LogType;
 import com.hy.disruptor.CleanedLogDisruptor;
-import com.hy.entity.DBLogMessage;
+import com.hy.entity.BaseLog;
+import com.hy.entity.LogEvent;
 import com.hy.entity.OriginLogMessage;
 import com.hy.service.strategy.LogCleanStrategy;
 import com.lmax.disruptor.EventHandler;
@@ -32,49 +34,27 @@ public class LogFilterHandler implements EventHandler<OriginLogMessage> {
     @Override
     public void onEvent(OriginLogMessage originLogMessage, long l, boolean b) throws Exception {
         // 1、清洗日志
-        DBLogMessage dbLogMessage = clean(originLogMessage);
-        assert dbLogMessage != null;
+        BaseLog baseLog = cleanLog(originLogMessage);
         // 2、将清洗好的日志Event存入CleanedLogDisruptor
-        RingBuffer<DBLogMessage> ringBuffer = disruptor.getDisruptor().getRingBuffer();
+        RingBuffer<LogEvent> ringBuffer = disruptor.getDisruptor().getRingBuffer();
         long sequence = ringBuffer.next();
         try {
-            extracted(dbLogMessage, ringBuffer, sequence);
+            LogEvent logEvent = ringBuffer.get(sequence);
+            logEvent.setLog(baseLog);
         } finally {
             ringBuffer.publish(sequence);
         }
     }
 
-    /**
-     * 将清洗后的dbLogMessage转为CleanedLogDisruptor里的event
-     * @param dbLogMessage
-     * @param ringBuffer
-     * @param sequence
-     */
-    private static void extracted(DBLogMessage dbLogMessage, RingBuffer<DBLogMessage> ringBuffer, long sequence) {
-        DBLogMessage event = ringBuffer.get(sequence);
-        event.setTimestamp(dbLogMessage.getTimestamp());
-        event.setEvent(dbLogMessage.getEvent());
-        event.setTags(dbLogMessage.getTags());
-        event.setMessage(dbLogMessage.getMessage());
-        event.setFields(dbLogMessage.getFields());
-        event.setDestination(dbLogMessage.getDestination());
-        event.setClient(dbLogMessage.getClient());
-        event.setUser(dbLogMessage.getUser());
-        event.setQuery(dbLogMessage.getQuery());
-        event.setSqlOut(dbLogMessage.getSqlOut());
-        event.setPath(dbLogMessage.getPath());
-        event.setType(dbLogMessage.getType());
-        event.setResult(dbLogMessage.getResult());
-        event.setOrganization(dbLogMessage.getOrganization());
+    // 通过传入日志类型由策略方法来决定调用哪种日志的清洗逻辑；
+    private BaseLog cleanLog(OriginLogMessage originLogMessage) {
+        LogType logType = LogType.fromString(originLogMessage.getLogType());
+        return strategies.stream()
+                .filter(strategies ->
+                    strategies.supports(logType)
+                )
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("日志类型不匹配, 日志类型： " + logType.getLogTypeName()))
+                .clean(originLogMessage);
     }
-
-    /**
-     * todo:清洗原始日志为DBLogMessage
-     * @param originLogMessage
-     * @return
-     */
-    private DBLogMessage clean(OriginLogMessage originLogMessage) {
-        return null;
-    }
-
 }

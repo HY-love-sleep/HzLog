@@ -1,5 +1,6 @@
 package com.hy.service.strategy;
 
+import com.hy.common.LogType;
 import com.hy.entity.BaseLog;
 import com.hy.entity.DBLogMessage;
 import com.hy.entity.OriginLogMessage;
@@ -20,7 +21,7 @@ public class DatabaseLogCleanStrategy implements LogCleanStrategy{
     }
 
     @Override
-    public boolean supports(String logType) {
-        return StringUtils.equals("database", logType);
+    public boolean supports(LogType logType) {
+        return logType == LogType.DatabaseLog;
     }
 }

@@ -1,5 +1,6 @@
 package com.hy.service.strategy;
 
+import com.hy.common.LogType;
 import com.hy.entity.BaseLog;
 import com.hy.entity.OriginLogMessage;
 
@@ -26,5 +27,5 @@ import com.hy.entity.OriginLogMessage;
 public interface LogCleanStrategy {
     BaseLog clean(OriginLogMessage originLog);
 
-    boolean supports(String logType);
+    boolean supports(LogType logType);
 }

@@ -2,6 +2,7 @@ package com.hy.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hy.entity.DBLogMessage;
+import com.hy.entity.LogEvent;
 import com.lmax.disruptor.EventHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.index.IndexRequest;
@@ -22,7 +23,7 @@ import java.io.IOException;
  */
 @Slf4j
 @Component
-public class LogSenderHandler implements EventHandler<DBLogMessage> {
+public class LogSenderHandler implements EventHandler<LogEvent> {
     private final RestHighLevelClient client;
     @Autowired
     public LogSenderHandler(RestHighLevelClient client) {
@@ -35,9 +36,9 @@ public class LogSenderHandler implements EventHandler<DBLogMessage> {
     private String index;
 
     @Override
-    public void onEvent(DBLogMessage dbLogMessage, long l, boolean b) throws Exception {
+    public void onEvent(LogEvent logEvent, long l, boolean b) throws Exception {
         IndexRequest indexRequest = new IndexRequest(index);
-        String messageString = objectMapper.writeValueAsString(dbLogMessage);
+        String messageString = objectMapper.writeValueAsString(logEvent.getLog());
         indexRequest.source(messageString, XContentType.JSON);
         String result = "";
         try {
