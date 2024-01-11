@@ -3,10 +3,13 @@ package com.hy.handler;
 import com.hy.disruptor.CleanedLogDisruptor;
 import com.hy.entity.DBLogMessage;
 import com.hy.entity.OriginLogMessage;
+import com.hy.service.strategy.LogCleanStrategy;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Description: 清洗日志
@@ -15,8 +18,16 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class LogFilterHandler implements EventHandler<OriginLogMessage> {
+    private final CleanedLogDisruptor disruptor;
+
+    private final List<LogCleanStrategy> strategies;
+
     @Autowired
-    private CleanedLogDisruptor disruptor;
+    public LogFilterHandler(CleanedLogDisruptor disruptor, List<LogCleanStrategy> strategies) {
+        this.disruptor = disruptor;
+        this.strategies = strategies;
+    }
+
 
     @Override
     public void onEvent(OriginLogMessage originLogMessage, long l, boolean b) throws Exception {
