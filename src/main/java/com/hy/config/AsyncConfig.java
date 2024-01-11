@@ -17,10 +17,10 @@ public class AsyncConfig {
     @Bean(name = "asyncExecutor")
     public TaskExecutor asyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(5); // 设置核心线程池大小
-        executor.setMaxPoolSize(10); // 设置最大线程池大小
-        executor.setQueueCapacity(20); // 设置队列容量
-        executor.setThreadNamePrefix("async-"); // 设置线程名前缀
+        executor.setCorePoolSize(5);
+        executor.setMaxPoolSize(10);
+        executor.setQueueCapacity(20);
+        executor.setThreadNamePrefix("async-");
         executor.initialize();
         return executor;
     }

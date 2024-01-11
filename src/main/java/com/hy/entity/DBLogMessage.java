@@ -11,13 +11,9 @@ import java.util.Map;
  * Author: yhong
  * Date: 2024/1/10
  */
-public class DBLogMessage implements Serializable {
+public class DBLogMessage extends BaseLog implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private LocalDateTime timestamp;
-    private Event event;
-    private String[] tags;
-    private String message;
     private Map<String, String> fields;
     private Destination destination;
     private Client client;
@@ -28,38 +24,6 @@ public class DBLogMessage implements Serializable {
     private String type;
     private Result result;
     private Organization organization;
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public Event getEvent() {
-        return event;
-    }
-
-    public void setEvent(Event event) {
-        this.event = event;
-    }
-
-    public String[] getTags() {
-        return tags;
-    }
-
-    public void setTags(String[] tags) {
-        this.tags = tags;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
     public Map<String, String> getFields() {
         return fields;

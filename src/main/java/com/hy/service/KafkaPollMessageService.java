@@ -46,6 +46,7 @@ public class KafkaPollMessageService implements DisposableBean {
                 for (ConsumerRecord<String, String> record : records) {
                     OriginLogMessage message = new OriginLogMessage();
                     message.setOriginLogMessage(record.value());
+
                     RingBuffer<OriginLogMessage> ringBuffer = disruptor.getDisruptor().getRingBuffer();
                     long sequence = ringBuffer.next();
                     try {
@@ -61,8 +62,7 @@ public class KafkaPollMessageService implements DisposableBean {
         }
     }
 
-    // 继承了DisposableBean接口
-    // spring容器关闭时自动调用destroy
+    // 继承了DisposableBean接口, spring容器关闭时自动调用destroy方法
     @Override
     public void destroy() throws Exception {
         this.running = false;

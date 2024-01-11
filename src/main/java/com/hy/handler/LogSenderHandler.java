@@ -39,12 +39,13 @@ public class LogSenderHandler implements EventHandler<DBLogMessage> {
         IndexRequest indexRequest = new IndexRequest(index);
         String messageString = objectMapper.writeValueAsString(dbLogMessage);
         indexRequest.source(messageString, XContentType.JSON);
-
+        String result = "";
         try {
+            // 发送清洗好的日志到es指定索引中
             IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
-            // 检查响应状态，例如 indexResponse.getResult()
+            result = indexResponse.getResult().toString();
         } catch (IOException e) {
-            log.error(e.getMessage());
+            log.error("写入es索引失败， 索引{}, 响应状态:{}, error:{}", index, result, e.getMessage());
         }
     }
 }
