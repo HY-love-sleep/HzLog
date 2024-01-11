@@ -1,7 +1,6 @@
 package com.hy.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hy.common.EsClient;
 import com.hy.entity.DBLogMessage;
 import com.lmax.disruptor.EventHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -24,18 +23,19 @@ import java.io.IOException;
 @Slf4j
 @Component
 public class LogSenderHandler implements EventHandler<DBLogMessage> {
-
+    private final RestHighLevelClient client;
     @Autowired
-    private EsClient esClient;
+    public LogSenderHandler(RestHighLevelClient client) {
+        this.client = client;
+    }
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Value("${spring.es.index}")
     private String index;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     @Override
     public void onEvent(DBLogMessage dbLogMessage, long l, boolean b) throws Exception {
-        RestHighLevelClient client = esClient.getClient();
         IndexRequest indexRequest = new IndexRequest(index);
         String messageString = objectMapper.writeValueAsString(dbLogMessage);
         indexRequest.source(messageString, XContentType.JSON);
