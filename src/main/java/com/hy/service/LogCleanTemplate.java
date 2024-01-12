@@ -1,5 +1,6 @@
 package com.hy.service;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hy.entity.BaseLog;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hy.entity.OriginLogMessage;
@@ -21,30 +22,21 @@ public abstract class LogCleanTemplate {
     }
 
     // 2. 将原始日志转为JSON格式
-    protected String convertToJSON(OriginLogMessage rawLog) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.writeValueAsString(rawLog.getOriginLogMessage());
-        } catch (Exception e) {
-            log.error("日志转换json出错， 原始日志：{}", e.getMessage());
-            return null;
-        }
-    }
+    protected abstract ObjectNode convertToJSON(OriginLogMessage rawLog);
 
     // 3. 将JSON格式的原始日志转为对应的实体类
-    protected abstract <T> T convertToEntity(String jsonLog, Class<T> entityClass);
+    protected abstract <T> T convertToEntity(ObjectNode jsonNode, Class<T> entityClass);
 
+    // 定义模板方法，固定日志清洗流程。 模板方法不可以被重写
     public final <T> T cleanLog(OriginLogMessage rawLog, boolean shouldPrint, Class<T> entityClass) {
-        // 步骤1：打印原始日志
+
         printRawLog(rawLog, shouldPrint);
 
-        // 步骤2：将原始日志转为JSON格式
-        String jsonLog = convertToJSON(rawLog);
+        ObjectNode jsonNode = convertToJSON(rawLog);
 
-        assert jsonLog != null;
+        assert jsonNode != null;
 
-        // 步骤3：将JSON格式的原始日志转为对应的实体类
-        return convertToEntity(jsonLog, entityClass);
+        return convertToEntity(jsonNode, entityClass);
     }
 }
 

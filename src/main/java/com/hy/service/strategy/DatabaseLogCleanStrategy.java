@@ -1,11 +1,13 @@
 package com.hy.service.strategy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hy.common.LogType;
 import com.hy.entity.BaseLog;
 import com.hy.entity.DBLogMessage;
 import com.hy.entity.OriginLogMessage;
 import com.hy.service.LogCleanTemplate;
+import com.hy.utils.ParseHaiNLog_HaiNan;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -29,21 +31,14 @@ public class DatabaseLogCleanStrategy extends LogCleanTemplate implements LogCle
         return logType == LogType.DatabaseLog;
     }
 
-    /**
-     * 需要根据实际的字段匹配日志模板
-     * @param jsonLog
-     * @param entityClass
-     * @return
-     * @param <T>
-     */
     @Override
-    protected <T> T convertToEntity(String jsonLog, Class<T> entityClass) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.readValue(jsonLog, entityClass);
-        } catch (Exception e) {
-            log.error("ConvertJsonToEntity false , cause by :{}", e.getMessage());
-            return null;
-        }
+    protected ObjectNode convertToJSON(OriginLogMessage rawLog) {
+        String originLogMessage = rawLog.getOriginLogMessage();
+        return ParseHaiNLog_HaiNan.parseCustomLog(originLogMessage);
+    }
+
+    @Override
+    protected <T> T convertToEntity(ObjectNode jsonLog, Class<T> entityClass) {
+        return null;
     }
 }
