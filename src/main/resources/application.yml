@@ -1,11 +1,12 @@
 spring:
   kafka:
     bootstrap:
-      servers: 192.168.174.132:9092
+      servers: 192.168.0.128:9092
+    bootstrap-servers: 192.168.0.128:9092
     topic:
       log-info
     group:
-      id: log-info-group
+      id: log-info-group1
     max:
       poll:
         records: 500
@@ -15,9 +16,9 @@ spring:
       deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
   es:
-    hostname: 192.168.174.132
+    hostname: 192.168.0.128
     port: 9200
     schema: http
     username: elastic
     passwd: 971122
-    index: dbAudit
+    index: databaseaudit-hy

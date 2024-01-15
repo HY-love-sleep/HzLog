@@ -14,6 +14,14 @@ public class OriginLogMessage implements Serializable {
 
     String logType;
 
+    public OriginLogMessage(String originLogMessage, String logType) {
+        this.originLogMessage = originLogMessage;
+        this.logType = logType;
+    }
+
+    public OriginLogMessage() {
+    }
+
     public String getOriginLogMessage() {
         return originLogMessage;
     }

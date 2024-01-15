@@ -8,6 +8,7 @@ import com.hy.entity.OriginLogMessage;
 import com.hy.service.strategy.LogCleanStrategy;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,7 @@ import java.util.List;
  * Author: yhong
  * Date: 2024/1/9
  */
+@Slf4j
 @Component
 public class LogFilterHandler implements EventHandler<OriginLogMessage> {
     private final CleanedLogDisruptor disruptor;
@@ -33,6 +35,7 @@ public class LogFilterHandler implements EventHandler<OriginLogMessage> {
 
     @Override
     public void onEvent(OriginLogMessage originLogMessage, long l, boolean b) throws Exception {
+        log.info("原始日志：{}", originLogMessage.getOriginLogMessage());
         // 1、清洗日志
         BaseLog baseLog = cleanLog(originLogMessage);
         // 2、将清洗好的日志Event存入CleanedLogDisruptor
@@ -48,6 +51,7 @@ public class LogFilterHandler implements EventHandler<OriginLogMessage> {
 
     // 通过传入日志类型由策略方法来决定调用哪种日志的清洗逻辑；
     private BaseLog cleanLog(OriginLogMessage originLogMessage) {
+        log.info("待清洗的原始日志：{}", originLogMessage.toString());
         LogType logType = LogType.fromString(originLogMessage.getLogType());
         return strategies.stream()
                 .filter(strategies ->

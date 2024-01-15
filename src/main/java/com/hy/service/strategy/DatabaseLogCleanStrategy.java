@@ -52,7 +52,7 @@ public class DatabaseLogCleanStrategy extends LogCleanTemplate implements LogCle
         if (entityClass.equals(DBLogMessage.class)) {
             ObjectMapper objectMapper = new ObjectMapper();
             DBLogMessage dbLogMessage = new DBLogMessage();
-
+            log.info("jsonLog: {}", jsonLog);
             Event event = new Event();
             event.setKind("event").setCategory("database").setType("info").setOutcome(jsonLog.get("执行结果").asText())
                     .setZone("数据库审计").setCreated(LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC))
@@ -87,8 +87,8 @@ public class DatabaseLogCleanStrategy extends LogCleanTemplate implements LogCle
             Organization organization = new Organization();
             organization.setName("海南大数据").setPlatform("数据库审计");
             dbLogMessage.setOrganization(organization);
-
-            return objectMapper.convertValue(jsonLog, entityClass);
+            // todo:Java 8 date/time type `java.time.LocalDateTime` not supported by default: add Module "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" to enable handling (through reference chain: com.hy.entity.DBLogMessage["event"]->com.hy.entity.Event["created"])
+            return objectMapper.convertValue(dbLogMessage, entityClass);
         }
         return null;
     }

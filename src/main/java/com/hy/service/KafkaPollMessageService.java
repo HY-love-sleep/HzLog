@@ -1,5 +1,6 @@
 package com.hy.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hy.disruptor.OriginLogDisruptor;
 import com.hy.entity.OriginLogMessage;
 import com.lmax.disruptor.RingBuffer;
@@ -26,6 +27,7 @@ public class KafkaPollMessageService implements DisposableBean {
     private final OriginLogDisruptor disruptor;
     private volatile boolean running = true;
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     public KafkaPollMessageService(KafkaConsumer<String, String> consumer, OriginLogDisruptor disruptor) {
@@ -44,14 +46,14 @@ public class KafkaPollMessageService implements DisposableBean {
             try {
                 records = consumer.poll(Duration.ofMillis(2000));
                 for (ConsumerRecord<String, String> record : records) {
-                    OriginLogMessage message = new OriginLogMessage();
-                    message.setOriginLogMessage(record.value());
+                    OriginLogMessage message = objectMapper.readValue(record.value(), OriginLogMessage.class);
 
                     RingBuffer<OriginLogMessage> ringBuffer = disruptor.getDisruptor().getRingBuffer();
                     long sequence = ringBuffer.next();
                     try {
                         OriginLogMessage event = ringBuffer.get(sequence);
                         event.setOriginLogMessage(message.getOriginLogMessage());
+                        event.setLogType(message.getLogType());
                     } finally {
                         ringBuffer.publish(sequence);
                     }
