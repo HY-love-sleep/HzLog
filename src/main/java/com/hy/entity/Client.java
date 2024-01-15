@@ -1,5 +1,8 @@
 package com.hy.entity;
 
+import lombok.Data;
+import lombok.experimental.Accessors;
+
 import java.io.Serializable;
 
 /**
@@ -7,24 +10,10 @@ import java.io.Serializable;
  * Author: yhong
  * Date: 2024/1/10
  */
+@Data
+@Accessors(chain = true)
 public class Client implements Serializable {
     private static final long serialVersionUID = 1L;
     private String ip;
     private String port;
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public String getPort() {
-        return port;
-    }
-
-    public void setPort(String port) {
-        this.port = port;
-    }
 }
