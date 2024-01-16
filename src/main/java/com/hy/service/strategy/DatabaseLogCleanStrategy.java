@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Date;
 
 /**
  * Description: 数据库日志清洗策略
@@ -55,7 +56,7 @@ public class DatabaseLogCleanStrategy extends LogCleanTemplate implements LogCle
             log.info("jsonLog: {}", jsonLog);
             Event event = new Event();
             event.setKind("event").setCategory("database").setType("info").setOutcome(jsonLog.get("执行结果").asText())
-                    .setZone("数据库审计").setCreated(LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC))
+                    .setZone("数据库审计").setCreated(new Date())
                     .setSequence("");
             dbLogMessage.setEvent(event);
 
@@ -69,7 +70,9 @@ public class DatabaseLogCleanStrategy extends LogCleanTemplate implements LogCle
             client.setIp(jsonLog.get("客户端IP").asText()).setPort(jsonLog.get("客户端端口").asText());
             dbLogMessage.setClient(client);
 
-            dbLogMessage.setUser(new User(jsonLog.get("数据库用户").asText()));
+            User user = new User();
+            user.setName(jsonLog.get("数据库用户").asText());
+            dbLogMessage.setUser(user);
 
             dbLogMessage.setQuery(jsonLog.get("SQL语句").asText());
 
