@@ -13,7 +13,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Description: 发送消息到kafka
+ * Description: 随机生成日志消息， 并发送消息到kafka
  * Author: yhong
  * Date: 2024/1/15
  */

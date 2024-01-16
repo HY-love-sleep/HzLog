@@ -25,10 +25,10 @@ public abstract class LogCleanTemplate {
     protected abstract ObjectNode convertToJSON(OriginLogMessage rawLog);
 
     // 3. 将JSON格式的原始日志转为对应的实体类
-    protected abstract <T> T convertToEntity(ObjectNode jsonNode, Class<T> entityClass);
+    protected abstract <T> T convertToEntity(ObjectNode jsonNode, Class<T> entityClass) throws Exception;
 
     // 定义模板方法，固定日志清洗流程。 模板方法不可以被重写
-    public final <T> T cleanLog(OriginLogMessage rawLog, boolean shouldPrint, Class<T> entityClass) {
+    public final <T> T cleanLog(OriginLogMessage rawLog, boolean shouldPrint, Class<T> entityClass) throws Exception {
 
         printRawLog(rawLog, shouldPrint);
 

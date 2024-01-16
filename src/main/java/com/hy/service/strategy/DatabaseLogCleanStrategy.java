@@ -6,6 +6,7 @@ import com.hy.common.LogType;
 import com.hy.entity.*;
 import com.hy.service.LogCleanTemplate;
 import com.hy.utils.ParseHaiNLog_HaiNan;
+import com.hy.utils.SQLParserUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Description: 数据库日志清洗策略
@@ -25,7 +27,7 @@ import java.util.Date;
 public class DatabaseLogCleanStrategy extends LogCleanTemplate implements LogCleanStrategy{
 
     @Override
-    public DBLogMessage clean(OriginLogMessage originLog) {
+    public DBLogMessage clean(OriginLogMessage originLog) throws Exception {
         return cleanLog(originLog, true, DBLogMessage.class);
     }
 
@@ -49,7 +51,7 @@ public class DatabaseLogCleanStrategy extends LogCleanTemplate implements LogCle
      * @param <T>
      */
     @Override
-    protected <T> T convertToEntity(ObjectNode jsonLog, Class<T> entityClass) {
+    protected <T> T convertToEntity(ObjectNode jsonLog, Class<T> entityClass) throws Exception {
         if (entityClass.equals(DBLogMessage.class)) {
             ObjectMapper objectMapper = new ObjectMapper();
             DBLogMessage dbLogMessage = new DBLogMessage();
@@ -76,8 +78,11 @@ public class DatabaseLogCleanStrategy extends LogCleanTemplate implements LogCle
 
             dbLogMessage.setQuery(jsonLog.get("SQL语句").asText());
 
-            // todo: 引入强哥的插件
-            dbLogMessage.setSqlOut(null);
+            // 引入强哥的sql解析插件
+            Map<String, Object> mysql = SQLParserUtil.getSqlOut(jsonLog.get("SQL语句").asText(), "mysql");
+            String jsonString = objectMapper.writeValueAsString(mysql);
+            SqlOut sqlOut = objectMapper.readValue(jsonString, SqlOut.class);
+            dbLogMessage.setSqlOut(sqlOut);
 
             dbLogMessage.setPath(null);
 
@@ -90,7 +95,7 @@ public class DatabaseLogCleanStrategy extends LogCleanTemplate implements LogCle
             Organization organization = new Organization();
             organization.setName("海南大数据").setPlatform("数据库审计");
             dbLogMessage.setOrganization(organization);
-            // todo:Java 8 date/time type `java.time.LocalDateTime` not supported by default: add Module "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" to enable handling (through reference chain: com.hy.entity.DBLogMessage["event"]->com.hy.entity.Event["created"])
+
             return objectMapper.convertValue(dbLogMessage, entityClass);
         }
         return null;

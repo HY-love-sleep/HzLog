@@ -12,24 +12,6 @@ import java.util.regex.Pattern;
  * Date: 2024/1/12
  */
 public class ParseHaiNLog_HaiNan {
-    // public static ObjectNode parseCustomLog(String log) {
-    //     ObjectMapper objectMapper = new ObjectMapper();
-    //     ObjectNode logObject = objectMapper.createObjectNode();
-    //
-    //     // 使用正则表达式匹配键值对
-    //     String keyValueRegex = "(.+?):(.+?)(?=(?:\\||$))";
-    //     Pattern pattern = Pattern.compile(keyValueRegex);
-    //     Matcher matcher = pattern.matcher(log);
-    //
-    //     while (matcher.find()) {
-    //         String key = matcher.group(1).trim().substring(1);
-    //         String value = matcher.group(2).trim();
-    //         logObject.put(key, value);
-    //     }
-    //
-    //     return logObject;
-    // }
-
     public static ObjectNode parseCustomLog(String log) {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode logObject = objectMapper.createObjectNode();

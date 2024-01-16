@@ -25,7 +25,7 @@ import com.hy.entity.OriginLogMessage;
  * Date: 2024/1/11
  */
 public interface LogCleanStrategy {
-    BaseLog clean(OriginLogMessage originLog);
+    BaseLog clean(OriginLogMessage originLog) throws Exception;
 
     boolean supports(LogType logType);
 }

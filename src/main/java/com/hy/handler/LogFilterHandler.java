@@ -49,7 +49,7 @@ public class LogFilterHandler implements EventHandler<OriginLogMessage> {
     }
 
     // 通过传入日志类型由策略方法来决定调用哪种日志的清洗逻辑；
-    private BaseLog cleanLog(OriginLogMessage originLogMessage) {
+    private BaseLog cleanLog(OriginLogMessage originLogMessage) throws Exception {
         LogType logType = LogType.fromString(originLogMessage.getLogType());
         return strategies.stream()
                 .filter(strategies ->
