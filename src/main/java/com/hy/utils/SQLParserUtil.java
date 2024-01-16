@@ -144,11 +144,11 @@ public class SQLParserUtil {
     public static Map<String,Object> toJson(SQLStatement statement, String dlanguage, DbType dbTypeField){
         HashMap<String, Object> sqlOut = new HashMap<>();
         SchemaStatVisitor visitor=new MySqlSchemaStatVisitor();
-        if(dbTypeField.name().equals("mysql")){
+        if("mysql".equals(dbTypeField.name())){
             visitor = new MySqlSchemaStatVisitor();
-        }else if(dbTypeField.name().equals("oracle")){
+        }else if("oracle".equals(dbTypeField.name())){
             visitor=new OracleSchemaStatVisitor();
-        }else if(dbTypeField.name().equals("hive")){
+        }else if("hive".equals(dbTypeField.name())){
             visitor=new HiveSchemaStatVisitor();
         }
         statement.accept(visitor);
