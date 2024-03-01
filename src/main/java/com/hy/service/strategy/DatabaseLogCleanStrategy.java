@@ -44,18 +44,20 @@ public class DatabaseLogCleanStrategy extends LogCleanTemplate implements LogCle
 
     /**
      * 将json对象转为需要的日志实体类
-     * todo: 这个方法需要优化， 1、考虑使用规则引擎引入类似logstash的脚本完成转换；  2、内部一些重复使用的方法提取到工具类
      * @param jsonLog
      * @param entityClass
      * @return
      * @param <T>
      */
+    // todo: 下面写死的字段也提取到ParseHaiNLog_HaiNan.mapJsonToEntity里去
     @Override
     protected <T> T convertToEntity(ObjectNode jsonLog, Class<T> entityClass) throws Exception {
         if (entityClass.equals(DBLogMessage.class)) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            DBLogMessage dbLogMessage = new DBLogMessage();
             log.info("jsonLog: {}", jsonLog);
+            ObjectMapper objectMapper = new ObjectMapper();
+            // 将能映射的先映射上去
+            DBLogMessage dbLogMessage = ParseHaiNLog_HaiNan.mapJsonToEntity(jsonLog, DBLogMessage.class);
+            // 自定义的手动set或者定义map来set
             Event event = new Event();
             event.setKind("event").setCategory("database").setType("info").setOutcome(jsonLog.get("执行结果").asText())
                     .setZone("数据库审计").setCreated(new Date())
@@ -63,20 +65,6 @@ public class DatabaseLogCleanStrategy extends LogCleanTemplate implements LogCle
             dbLogMessage.setEvent(event);
 
             dbLogMessage.setMessage(jsonLog.toString());
-
-            Destination destination = new Destination();
-            destination.setIp(jsonLog.get("服务器IP").asText()).setPort(jsonLog.get("服务器端口").asText());
-            dbLogMessage.setDestination(destination);
-
-            Client client = new Client();
-            client.setIp(jsonLog.get("客户端IP").asText()).setPort(jsonLog.get("客户端端口").asText());
-            dbLogMessage.setClient(client);
-
-            User user = new User();
-            user.setName(jsonLog.get("数据库用户").asText());
-            dbLogMessage.setUser(user);
-
-            dbLogMessage.setQuery(jsonLog.get("SQL语句").asText());
 
             // 引入强哥的sql解析插件
             Map<String, Object> mysql = SQLParserUtil.getSqlOut(jsonLog.get("SQL语句").asText(), "mysql");
@@ -88,9 +76,9 @@ public class DatabaseLogCleanStrategy extends LogCleanTemplate implements LogCle
 
             dbLogMessage.setType("database");
 
-            Result result = new Result();
-            result.setLatency(jsonLog.get("响应时间").asText()).setRows(Integer.valueOf(jsonLog.get("影响行数").asText()));
-            dbLogMessage.setResult(result);
+            // Result result = new Result();
+            // result.setLatency(jsonLog.get("响应时间").asText()).setRows(Integer.valueOf(jsonLog.get("影响行数").asText()));
+            // dbLogMessage.setResult(result);
 
             Organization organization = new Organization();
             organization.setName("海南大数据").setPlatform("数据库审计");

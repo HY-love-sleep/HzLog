@@ -1,5 +1,7 @@
 package com.hy.entity;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import lombok.ToString;
 import sun.security.krb5.internal.crypto.Des;
 
 import java.io.Serializable;
@@ -11,6 +13,7 @@ import java.util.Map;
  * Author: yhong
  * Date: 2024/1/10
  */
+@ToString
 public class DBLogMessage extends BaseLog implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -103,5 +106,61 @@ public class DBLogMessage extends BaseLog implements Serializable {
 
     public void setOrganization(Organization organization) {
         this.organization = organization;
+    }
+
+    @JsonSetter("destination.ip")
+    public void setDestinationIp(String ip) {
+        if (destination == null) {
+            destination = new Destination();
+        }
+        destination.setIp(ip);
+    }
+
+    @JsonSetter("destination.port")
+    public void setDestinationPort(String port) {
+        if (destination == null) {
+            destination = new Destination();
+        }
+        destination.setPort(port);
+    }
+
+    @JsonSetter("client.ip")
+    public void setClientIp(String ip) {
+        if (client == null) {
+            client = new Client();
+        }
+        client.setIp(ip);
+    }
+
+    @JsonSetter("client.port")
+    public void setClientPort(String port) {
+        if (client == null) {
+            client = new Client();
+        }
+        client.setPort(port);
+    }
+
+    @JsonSetter("user.name")
+    public void setUserName(String name) {
+        if (user == null) {
+            user = new User();
+        }
+        user.setName(name);
+    }
+
+    @JsonSetter("result.rows")
+    public void setResultRows(int rows) {
+        if (result == null) {
+            result = new Result();
+        }
+        result.setRows(rows);
+    }
+
+    @JsonSetter("result.latency")
+    public void setResultLatency(String latency) {
+        if (result == null) {
+            result = new Result();
+        }
+        result.setLatency(latency);
     }
 }

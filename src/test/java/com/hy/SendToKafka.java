@@ -25,7 +25,7 @@ public class SendToKafka {
     @Test
     public void test() {
         // 随机生成1000条原始日志消息发送至kafka
-        List<String> logList = generateRandomLogs(100);
+        List<String> logList = generateRandomLogs(1000);
 
         List<OriginLogMessage> list = logList.stream()
                 .map(log -> new OriginLogMessage(log, "database"))
