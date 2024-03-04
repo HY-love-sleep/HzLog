@@ -174,18 +174,18 @@ public class SQLParserUtil {
         }
         if(arrayTable.size()>0){
             sqlOut.put("tables",arrayTable);
-            System.out.println("[sql_out][tables]："+arrayTable);
+            // System.out.println("[sql_out][tables]："+arrayTable);
         }
         if(arrayColumn.size()>0){
             sqlOut.put("columns",arrayColumn);
-            System.out.println("[sql_out][columns]:"+arrayColumn);
+            // System.out.println("[sql_out][columns]:"+arrayColumn);
         }
         if (dbs.size()>0){
             sqlOut.put("dbName",dbs.get(0));
-            System.out.println("[sql_out][dbName]:"+dbs.get(0));
+            // System.out.println("[sql_out][dbName]:"+dbs.get(0));
         }
         sqlOut.put("dlanguage",dlanguage);
-        System.out.println("[sql_out][dlanguage]:"+dlanguage);
+        // System.out.println("[sql_out][dlanguage]:"+dlanguage);
         return sqlOut;
     }
 

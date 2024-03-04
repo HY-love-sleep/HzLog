@@ -41,6 +41,7 @@ public class KafkaPollMessageService implements DisposableBean {
      */
     @Async("asyncExecutor")
     public void startConsuming() {
+        log.info("kafka consumer startConsuming!");
         while (running) {
             ConsumerRecords<String, String> records;
             try {

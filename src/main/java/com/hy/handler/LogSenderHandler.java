@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Description: 发送日志到es
@@ -39,11 +42,15 @@ public class LogSenderHandler implements EventHandler<LogEvent> {
     public void onEvent(LogEvent logEvent, long l, boolean b) throws Exception {
         IndexRequest indexRequest = new IndexRequest(index);
         String messageString = objectMapper.writeValueAsString(logEvent.getLog());
-        indexRequest.source(messageString, XContentType.JSON);
+        Map<String, Object> document = new HashMap<>();
+        document.put("@timestamp", Instant.now().toEpochMilli()); // 将时间戳转换为 ISO8601 格式的字符串
+        document.put("message", messageString); // 其他字段信息
+        indexRequest.source(document, XContentType.JSON);
         String result = "";
         try {
             // 发送清洗好的日志到es指定索引中
             IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
+            // log.info("indexRequest.toString():{}", indexRequest);
             result = indexResponse.getResult().toString();
         } catch (IOException e) {
             log.error("写入es索引失败， 索引{}, 响应状态:{}, error:{}", index, result, e.getMessage());

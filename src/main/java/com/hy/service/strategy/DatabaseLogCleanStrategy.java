@@ -28,7 +28,7 @@ public class DatabaseLogCleanStrategy extends LogCleanTemplate implements LogCle
 
     @Override
     public DBLogMessage clean(OriginLogMessage originLog) throws Exception {
-        return cleanLog(originLog, true, DBLogMessage.class);
+        return cleanLog(originLog, false, DBLogMessage.class);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class DatabaseLogCleanStrategy extends LogCleanTemplate implements LogCle
     @Override
     protected <T> T convertToEntity(ObjectNode jsonLog, Class<T> entityClass) throws Exception {
         if (entityClass.equals(DBLogMessage.class)) {
-            log.info("jsonLog: {}", jsonLog);
+            // log.info("jsonLog: {}", jsonLog);
             ObjectMapper objectMapper = new ObjectMapper();
             // 将能映射的先映射上去
             DBLogMessage dbLogMessage = ParseHaiNLog_HaiNan.mapJsonToEntity(jsonLog, DBLogMessage.class);
