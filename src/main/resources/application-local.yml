@@ -22,3 +22,17 @@ spring:
     username: elastic
     passwd: 971122
     index: databaseaudit-hy
+
+  inner:
+    consumer: true  # 发送kafka消息时将其改为 fasle
+
+syslog:
+  producer:
+    host: 127.0.0.1
+    port: 5144
+    protocol: UDP
+
+  consumer:
+    host: 127.0.0.1
+    port: 5144
+    protocol: UDP

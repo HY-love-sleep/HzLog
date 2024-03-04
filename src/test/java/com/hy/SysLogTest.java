@@ -1,38 +1,59 @@
 package com.hy;
 
-import com.hy.entity.OriginLogMessage;
-import com.hy.service.KafkaProducerService;
+import com.hy.service.SysLogReceivedMessageService;
+import org.graylog2.syslog4j.Syslog;
+import org.graylog2.syslog4j.SyslogConstants;
+import org.graylog2.syslog4j.SyslogIF;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
- * Description: 随机生成日志消息， 并发送消息到kafka
+ * Description: 发送SysLog消息
  * Author: yhong
- * Date: 2024/1/15
+ * Date: 2024/3/4
  */
 @SpringBootTest(classes = HyLogApplication.class)
-public class SendToKafka {
+public class SysLogTest {
+    @Value("${syslog.producer.host}")
+    private String host;
+    @Value("${syslog.producer.port}")
+    private Integer port;
+
     @Autowired
-    private KafkaProducerService kafkaProducerService;
+    private SysLogReceivedMessageService sysLogReceivedMessageService;
 
     @Test
-    public void test() {
-        // 随机生成50000条原始日志消息发送至kafka
-        List<String> logList = generateRandomLogs(50000);
-
-        List<OriginLogMessage> list = logList.stream()
-                .map(log -> new OriginLogMessage(log, "database"))
-                .collect(Collectors.toList());
-
-        kafkaProducerService.AsyncSendStudentsToKafka(list);
+    public void sendSyslogTest() {
+        generate();
     }
+    @Test
+    public void getSysLogTest() throws InterruptedException {
+        sysLogReceivedMessageService.receiveSyslogMessage();
+    }
+
+    public void generate() {
+        SyslogIF syslog = Syslog.getInstance(SyslogConstants.UDP);
+        syslog.getConfig().setHost(host);
+        syslog.getConfig().setPort(port);
+        List<String> logList = generateRandomLogs(50000);
+        for (String log : logList) {
+            try {
+                syslog.log(0, URLDecoder.decode(log, "utf-8"));
+            } catch (UnsupportedEncodingException e) {
+                System.out.println("generate log get exception " + e);
+            }
+        }
+    }
+
+
 
     private static List<String> generateRandomLogs(int count) {
         List<String> logs = new ArrayList<>();

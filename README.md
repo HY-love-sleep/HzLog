@@ -54,10 +54,13 @@
 
    ![image-20240304104327026](img/image-20240304104327026.png)
 
-   在send时需要把kafkaMessageService.startConsuming();注释掉， **线上不存在该程序自己发送kafka消息的场景**；
-
-   ![image-20240304105543833](img/image-20240304105543833.png)
-
 4. 启动程序， 消费日志到es中；
 
-   
+
+
+### 5、集成syslog
+
+通过SyslogServerIF接收syslog消息， 监听到消息直接扔给线程池， 由线程池提交给disruptor;
+
+经测试， 每秒发送8000条syslog消息时， UDP模式下能保证不丢消息；
+
