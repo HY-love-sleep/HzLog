@@ -54,10 +54,10 @@
 
    ![image-20240304104327026](img/image-20240304104327026.png)
 
-   在send时需要把kafkaMessageService.startConsuming();注释掉， 线上不存在该程序自己发送kafka消息的场景；
+   在send时需要把kafkaMessageService.startConsuming();注释掉， **线上不存在该程序自己发送kafka消息的场景**；
 
    ![image-20240304105543833](img/image-20240304105543833.png)
 
 4. 启动程序， 消费日志到es中；
 
-5. 
+   

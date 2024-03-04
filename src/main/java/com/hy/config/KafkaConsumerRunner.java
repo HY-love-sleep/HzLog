@@ -1,6 +1,7 @@
 package com.hy.config;
 import com.hy.service.KafkaPollMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class KafkaConsumerRunner implements CommandLineRunner {
 
+    @Value("${spring.inner.consumer}")
+    private boolean consumerMode;
+
     private final KafkaPollMessageService kafkaMessageService;
 
     @Autowired
@@ -24,7 +28,9 @@ public class KafkaConsumerRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        kafkaMessageService.startConsuming();
+        if (consumerMode) {
+            kafkaMessageService.startConsuming();
+        }
     }
 }
 

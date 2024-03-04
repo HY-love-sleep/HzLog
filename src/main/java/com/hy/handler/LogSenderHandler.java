@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hy.entity.DBLogMessage;
 import com.hy.entity.LogEvent;
 import com.lmax.disruptor.EventHandler;
+import com.lmax.disruptor.WorkHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
@@ -26,8 +27,9 @@ import java.util.Map;
  */
 @Slf4j
 @Component
-public class LogSenderHandler implements EventHandler<LogEvent> {
+public class LogSenderHandler implements WorkHandler<LogEvent> {
     private final RestHighLevelClient client;
+
     @Autowired
     public LogSenderHandler(RestHighLevelClient client) {
         this.client = client;
@@ -39,12 +41,12 @@ public class LogSenderHandler implements EventHandler<LogEvent> {
     private String index;
 
     @Override
-    public void onEvent(LogEvent logEvent, long l, boolean b) throws Exception {
+    public void onEvent(LogEvent logEvent) throws Exception {
         IndexRequest indexRequest = new IndexRequest(index);
         String messageString = objectMapper.writeValueAsString(logEvent.getLog());
         Map<String, Object> document = new HashMap<>();
-        document.put("@timestamp", Instant.now().toEpochMilli()); // 将时间戳转换为 ISO8601 格式的字符串
-        document.put("message", messageString); // 其他字段信息
+        document.put("@timestamp", Instant.now().toEpochMilli());
+        document.put("message", messageString);
         indexRequest.source(document, XContentType.JSON);
         String result = "";
         try {
