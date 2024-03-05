@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Description: 发送日志到es
@@ -43,7 +44,9 @@ public class LogSenderHandler implements WorkHandler<LogEvent> {
         IndexRequest indexRequest = new IndexRequest(index);
         String messageString = objectMapper.writeValueAsString(logEvent.getLog());
         Map<String, Object> document = new HashMap<>();
-        document.put("@timestamp", Instant.now().toEpochMilli());
+        String timestamp = Optional.ofNullable(logEvent.getLog().getTimestamp())
+                .orElse(String.valueOf(Instant.now().toEpochMilli()));
+        document.put("@timestamp", timestamp);
         document.put("message", messageString);
         indexRequest.source(document, XContentType.JSON);
         String result = "";

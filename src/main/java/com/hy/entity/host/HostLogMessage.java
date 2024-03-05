@@ -1,9 +1,11 @@
 package com.hy.entity.host;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hy.entity.common.BaseLog;
 import com.hy.entity.common.Destination;
 import com.hy.entity.common.Organization;
 import com.hy.entity.common.User;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -12,13 +14,15 @@ import java.io.Serializable;
  * Author: yhong
  * Date: 2024/1/11
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
 public class HostLogMessage extends BaseLog implements Serializable {
     private static final long serialVersionUID = 1L;
     private Process process;
     private Host host;
     private Input input;
     private Agent agent;
-    private String fields;
+    private Object fields;
     private Source source;
     private Destination destination;
     private User user;
@@ -56,11 +60,11 @@ public class HostLogMessage extends BaseLog implements Serializable {
         this.agent = agent;
     }
 
-    public String getFields() {
+    public Object getFields() {
         return fields;
     }
 
-    public void setFields(String fields) {
+    public void setFields(Object fields) {
         this.fields = fields;
     }
 

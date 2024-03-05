@@ -1,5 +1,6 @@
 package com.hy.entity.database;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.util.Map;
  * Date: 2024/1/10
  */
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SqlOut implements Serializable {
     private static final long serialVersionUID = 1L;
     private String dlanguage;

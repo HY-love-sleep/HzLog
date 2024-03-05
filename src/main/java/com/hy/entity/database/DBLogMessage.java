@@ -1,5 +1,6 @@
 package com.hy.entity.database;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.hy.entity.common.BaseLog;
 import com.hy.entity.common.Destination;
@@ -16,6 +17,7 @@ import java.util.Map;
  * Date: 2024/1/10
  */
 @ToString
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DBLogMessage extends BaseLog implements Serializable {
     private static final long serialVersionUID = 1L;
 

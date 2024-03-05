@@ -4,7 +4,8 @@ spring:
       servers: 192.168.0.128:9092
     bootstrap-servers: 192.168.0.128:9092
     topic:
-      log-info
+#      log-info-db
+      log-info-host
     group:
       id: log-info-group1
     max:
@@ -24,7 +25,7 @@ spring:
     index: databaseaudit-hy
 
   inner:
-    consumer: true  # 发送kafka消息时将其改为 fasle
+    consumer: true  # 发送kafka消息时将其改为 false
 
 syslog:
   producer:

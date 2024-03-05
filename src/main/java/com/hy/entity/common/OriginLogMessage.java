@@ -1,5 +1,7 @@
 package com.hy.entity.common;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 
 /**
@@ -7,6 +9,7 @@ import java.io.Serializable;
  * Author: yhong
  * Date: 2024/1/9
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OriginLogMessage implements Serializable {
     private static final long serialVersionUID = 1L;
 

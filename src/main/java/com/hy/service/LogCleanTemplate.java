@@ -1,5 +1,6 @@
 package com.hy.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hy.entity.common.OriginLogMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,7 @@ public abstract class LogCleanTemplate {
     }
 
     // 2. 将原始日志转为JSON格式
-    protected abstract ObjectNode convertToJSON(OriginLogMessage rawLog);
+    protected abstract ObjectNode convertToJSON(OriginLogMessage rawLog) throws JsonProcessingException;
 
     // 3. 将JSON格式的原始日志转为对应的实体类
     protected abstract <T> T convertToEntity(ObjectNode jsonNode, Class<T> entityClass) throws Exception;

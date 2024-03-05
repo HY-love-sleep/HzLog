@@ -1,5 +1,6 @@
 package com.hy.entity.common;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -12,6 +13,7 @@ import java.io.Serializable;
  */
 @Data
 @Accessors(chain = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Destination implements Serializable {
     private static final long serialVersionUID = 1L;
     private String ip;

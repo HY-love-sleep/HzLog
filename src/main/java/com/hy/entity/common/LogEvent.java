@@ -1,5 +1,6 @@
 package com.hy.entity.common;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hy.entity.common.BaseLog;
 
 /**
@@ -7,6 +8,7 @@ import com.hy.entity.common.BaseLog;
  * Author: yhong
  * Date: 2024/1/11
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class LogEvent {
     private BaseLog log;
     public BaseLog getLog() {

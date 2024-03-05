@@ -1,5 +1,8 @@
 package com.hy.entity.common;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.ToString;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -8,18 +11,20 @@ import java.util.Date;
  * Author: yhong
  * Date: 2024/1/11
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
 public class BaseLog implements Serializable {
     private static final long serialVersionUID = 1L;
-    private Date timestamp;
-    private Event event;
-    private String[] tags;
-    private String message;
+    protected String timestamp;
+    protected Event event;
+    protected String[] tags;
+    protected String message;
 
-    public Date getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 

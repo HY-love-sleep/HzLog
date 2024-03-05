@@ -1,5 +1,7 @@
 package com.hy.entity.host;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 
 /**
@@ -7,6 +9,7 @@ import java.io.Serializable;
  * Author: yhong
  * Date: 2024/1/11
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Agent implements Serializable {
     private static final long serialVersionUID = 1L;
     private String id;
