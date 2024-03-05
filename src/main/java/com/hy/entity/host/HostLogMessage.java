@@ -1,4 +1,9 @@
-package com.hy.entity;
+package com.hy.entity.host;
+
+import com.hy.entity.common.BaseLog;
+import com.hy.entity.common.Destination;
+import com.hy.entity.common.Organization;
+import com.hy.entity.common.User;
 
 import java.io.Serializable;
 

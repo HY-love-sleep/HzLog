@@ -1,6 +1,6 @@
 package com.hy;
 
-import com.hy.entity.OriginLogMessage;
+import com.hy.entity.common.OriginLogMessage;
 import com.hy.service.KafkaProducerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**

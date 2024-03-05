@@ -2,7 +2,7 @@ package com.hy.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hy.disruptor.OriginLogDisruptor;
-import com.hy.entity.OriginLogMessage;
+import com.hy.entity.common.OriginLogMessage;
 import com.lmax.disruptor.RingBuffer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;

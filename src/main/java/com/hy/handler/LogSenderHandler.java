@@ -1,9 +1,7 @@
 package com.hy.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hy.entity.DBLogMessage;
-import com.hy.entity.LogEvent;
-import com.lmax.disruptor.EventHandler;
+import com.hy.entity.common.LogEvent;
 import com.lmax.disruptor.WorkHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.index.IndexRequest;

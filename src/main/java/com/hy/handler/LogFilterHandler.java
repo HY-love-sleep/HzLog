@@ -2,9 +2,9 @@ package com.hy.handler;
 
 import com.hy.common.LogType;
 import com.hy.disruptor.CleanedLogDisruptor;
-import com.hy.entity.BaseLog;
-import com.hy.entity.LogEvent;
-import com.hy.entity.OriginLogMessage;
+import com.hy.entity.common.BaseLog;
+import com.hy.entity.common.LogEvent;
+import com.hy.entity.common.OriginLogMessage;
 import com.hy.service.strategy.LogCleanStrategy;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;

@@ -1,6 +1,6 @@
 package com.hy.disruptor;
 
-import com.hy.entity.OriginLogMessage;
+import com.hy.entity.common.OriginLogMessage;
 import com.hy.factory.OriginLogMessageFactory;
 import com.hy.factory.LogThreadFactory;
 import com.hy.handler.LogFilterHandler;

@@ -1,4 +1,4 @@
-package com.hy.entity;
+package com.hy.entity.common;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

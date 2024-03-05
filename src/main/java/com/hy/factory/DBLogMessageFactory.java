@@ -1,6 +1,6 @@
 package com.hy.factory;
 
-import com.hy.entity.DBLogMessage;
+import com.hy.entity.database.DBLogMessage;
 import com.lmax.disruptor.EventFactory;
 
 /**

@@ -1,11 +1,13 @@
-package com.hy.entity;
+package com.hy.entity.database;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.hy.entity.common.BaseLog;
+import com.hy.entity.common.Destination;
+import com.hy.entity.common.Organization;
+import com.hy.entity.common.User;
 import lombok.ToString;
-import sun.security.krb5.internal.crypto.Des;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 /**

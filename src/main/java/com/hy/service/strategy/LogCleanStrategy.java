@@ -1,8 +1,8 @@
 package com.hy.service.strategy;
 
 import com.hy.common.LogType;
-import com.hy.entity.BaseLog;
-import com.hy.entity.OriginLogMessage;
+import com.hy.entity.common.BaseLog;
+import com.hy.entity.common.OriginLogMessage;
 
 /**
  * Description: 日志清洗策略接口

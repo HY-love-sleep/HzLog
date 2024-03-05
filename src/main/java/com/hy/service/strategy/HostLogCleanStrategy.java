@@ -2,10 +2,8 @@ package com.hy.service.strategy;
 
 
 import com.hy.common.LogType;
-import com.hy.entity.HostLogMessage;
-import com.hy.entity.OriginLogMessage;
-import lombok.extern.java.Log;
-import org.apache.commons.lang3.StringUtils;
+import com.hy.entity.host.HostLogMessage;
+import com.hy.entity.common.OriginLogMessage;
 import org.springframework.stereotype.Component;
 
 /**

@@ -1,4 +1,4 @@
-package com.hy.entity;
+package com.hy.entity.database;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -12,8 +12,8 @@ import java.io.Serializable;
  */
 @Data
 @Accessors(chain = true)
-public class Destination implements Serializable {
+public class Result implements Serializable {
     private static final long serialVersionUID = 1L;
-    private String ip;
-    private String port;
+    private Integer rows;
+    private String latency;
 }

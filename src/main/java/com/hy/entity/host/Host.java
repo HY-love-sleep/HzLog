@@ -1,4 +1,4 @@
-package com.hy.entity;
+package com.hy.entity.host;
 
 import java.io.Serializable;
 

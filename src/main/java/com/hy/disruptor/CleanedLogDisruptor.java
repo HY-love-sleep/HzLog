@@ -1,6 +1,6 @@
 package com.hy.disruptor;
 
-import com.hy.entity.LogEvent;
+import com.hy.entity.common.LogEvent;
 import com.hy.factory.LogEventFactory;
 import com.hy.factory.LogThreadFactory;
 import com.hy.handler.LogSenderHandler;
@@ -9,7 +9,6 @@ import com.lmax.disruptor.WorkHandler;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

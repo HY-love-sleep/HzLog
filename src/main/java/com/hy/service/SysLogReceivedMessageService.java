@@ -1,23 +1,14 @@
 package com.hy.service;
 
 import com.hy.disruptor.OriginLogDisruptor;
-import com.hy.entity.OriginLogMessage;
-import com.lmax.disruptor.RingBuffer;
-import com.sun.org.apache.bcel.internal.generic.FSUB;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.graylog2.syslog4j.Syslog;
 import org.graylog2.syslog4j.SyslogConstants;
-import org.graylog2.syslog4j.SyslogIF;
 import org.graylog2.syslog4j.server.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.SocketAddress;
-import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 
 /**

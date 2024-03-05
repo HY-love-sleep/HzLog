@@ -1,6 +1,6 @@
 package com.hy.factory;
 
-import com.hy.entity.OriginLogMessage;
+import com.hy.entity.common.OriginLogMessage;
 import com.lmax.disruptor.EventFactory;
 
 /**

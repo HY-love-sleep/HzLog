@@ -1,4 +1,6 @@
-package com.hy.entity;
+package com.hy.entity.common;
+
+import com.hy.entity.common.BaseLog;
 
 /**
  * Description: 通用日志事件类

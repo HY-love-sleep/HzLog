@@ -2,7 +2,7 @@ package com.hy.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hy.entity.DBLogMessage;
+import com.hy.entity.database.DBLogMessage;
 
 import java.util.HashMap;
 import java.util.Map;
