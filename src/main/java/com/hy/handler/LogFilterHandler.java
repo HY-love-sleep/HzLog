@@ -8,6 +8,7 @@ import com.hy.entity.common.OriginLogMessage;
 import com.hy.service.strategy.LogCleanStrategy;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.WorkHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,8 @@ import java.util.List;
  */
 @Slf4j
 @Component
-public class LogFilterHandler implements EventHandler<OriginLogMessage> {
+public class LogFilterHandler implements WorkHandler<OriginLogMessage> {
+
     private final CleanedLogDisruptor disruptor;
 
     private final List<LogCleanStrategy> strategies;
@@ -34,7 +36,7 @@ public class LogFilterHandler implements EventHandler<OriginLogMessage> {
 
 
     @Override
-    public void onEvent(OriginLogMessage originLogMessage, long l, boolean b) throws Exception {
+    public void onEvent(OriginLogMessage originLogMessage) throws Exception {
         // 1、清洗日志
         BaseLog baseLog = cleanLog(originLogMessage);
         // 2、将清洗好的日志Event存入CleanedLogDisruptor

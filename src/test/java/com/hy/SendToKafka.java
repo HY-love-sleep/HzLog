@@ -22,7 +22,7 @@ public class SendToKafka {
     private KafkaProducerService kafkaProducerService;
 
     @Test
-    public void test() {
+    public void sendDBLogTest() {
         // 随机生成50000条原始日志消息发送至kafka
         List<String> logList = generateRandomLogs(50000);
 
@@ -30,8 +30,23 @@ public class SendToKafka {
                 .map(log -> new OriginLogMessage(log, "database"))
                 .collect(Collectors.toList());
 
-        kafkaProducerService.AsyncSendStudentsToKafka(list);
+        kafkaProducerService.AsyncSendLogsToKafka(list);
     }
+
+    @Test
+    public void sendHostLogTest() {
+        List<String> logList = new ArrayList<>();
+        logList.add("{\"@version\":\"1\",\"fields\":{\"log_topic\":\"sys_command\"},\"hostipv6\":\"fe80::f816:3eff:fef2:2f41\",\"ecs\":{\"version\":\"1.0.0\"},\"agent\":{\"id\":\"d029fc38-474e-48aa-9722-dd1bea76a8a1\",\"version\":\"7.2.0\",\"ephemeral_id\":\"bb7f9f00-fba5-4860-9daa-45a5e8a47984\",\"type\":\"filebeat\",\"hostname\":\"caiji-165\"},\"message\":\"2023-10-09 11:14:02 ### root@/dev/pts/0 ### 172.20.205.154 53530 192.168.179.165 22 ### /data/logstash-7.14.0/1009 ### 1696820264 ###  ps aux | grep logstash \",\"input\":{\"type\":\"log\"},\"log\":{\"offset\":9406,\"file\":{\"path\":\"/.cmdlog/cmdlog.2023-10-09\"}},\"host\":{\"name\":\"caiji-165\",\"mac\":[\"fa:16:3e:f2:2f:41\"],\"architecture\":\"x86_64\",\"os\":{\"name\":\"CentOS Linux\",\"kernel\":\"3.10.0-957.el7.x86_64\",\"version\":\"7 (Core)\",\"family\":\"redhat\",\"platform\":\"centos\",\"codename\":\"Core\"},\"ip\":[\"192.168.179.165\",\"fe80::f816:3eff:fef2:2f41\"],\"containerized\":false,\"hostname\":\"caiji-165\",\"id\":\"ecd2091ebeb549d1a98835f858a296e9\"},\"@timestamp\":\"2023-10-09T03:14:03.970Z\",\"hostipv4\":\"192.168.179.165\",\"tags\":[\"bashhistory\"]}");
+        logList.add("{\"@version\":\"1\",\"fields\":{\"log_topic\":\"sys_command\"},\"hostipv6\":\"fe80::f816:3eff:fef2:2f41\",\"ecs\":{\"version\":\"1.0.0\"},\"agent\":{\"id\":\"d029fc38-474e-48aa-9722-dd1bea76a8a1\",\"version\":\"7.2.0\",\"ephemeral_id\":\"bb7f9f00-fba5-4860-9daa-45a5e8a47984\",\"type\":\"filebeat\",\"hostname\":\"caiji-165\"},\"message\":\"2023-10-09 11:14:25 ### root@/dev/pts/0 ### 172.20.205.154 53530 192.168.179.165 22 ### /data/logstash-7.14.0/1009 ### 1696820264 ###  nohup ../bin/logstash -f host-log-filter.conf -r --path.data=./data/host > host.log & \",\"input\":{\"type\":\"log\"},\"log\":{\"offset\":10880,\"file\":{\"path\":\"/.cmdlog/cmdlog.2023-10-09\"}},\"host\":{\"name\":\"caiji-165\",\"mac\":[\"fa:16:3e:f2:2f:41\"],\"architecture\":\"x86_64\",\"os\":{\"name\":\"CentOS Linux\",\"kernel\":\"3.10.0-957.el7.x86_64\",\"version\":\"7 (Core)\",\"platform\":\"centos\",\"family\":\"redhat\",\"codename\":\"Core\"},\"ip\":[\"192.168.179.165\",\"fe80::f816:3eff:fef2:2f41\"],\"containerized\":false,\"hostname\":\"caiji-165\",\"id\":\"ecd2091ebeb549d1a98835f858a296e9\"},\"@timestamp\":\"2023-10-09T03:14:25.975Z\",\"tags\":[\"bashhistory\"],\"hostipv4\":\"192.168.179.165\"}");
+        logList.add("{\"@version\":\"1\",\"hostipv6\":\"fe80::f816:3eff:fef2:2f41\",\"fields\":{\"log_topic\":\"sys_command\"},\"ecs\":{\"version\":\"1.0.0\"},\"agent\":{\"id\":\"d029fc38-474e-48aa-9722-dd1bea76a8a1\",\"ephemeral_id\":\"bb7f9f00-fba5-4860-9daa-45a5e8a47984\",\"version\":\"7.2.0\",\"type\":\"filebeat\",\"hostname\":\"caiji-165\"},\"message\":\"2023-10-09 11:14:21 ### root@/dev/pts/0 ### 172.20.205.154 53530 192.168.179.165 22 ### /data/logstash-7.14.0/1009 ### 1696820264 ###  history \",\"input\":{\"type\":\"log\"},\"log\":{\"offset\":10514,\"file\":{\"path\":\"/.cmdlog/cmdlog.2023-10-09\"}},\"host\":{\"name\":\"caiji-165\",\"mac\":[\"fa:16:3e:f2:2f:41\"],\"architecture\":\"x86_64\",\"os\":{\"name\":\"CentOS Linux\",\"kernel\":\"3.10.0-957.el7.x86_64\",\"version\":\"7 (Core)\",\"platform\":\"centos\",\"family\":\"redhat\",\"codename\":\"Core\"},\"ip\":[\"192.168.179.165\",\"fe80::f816:3eff:fef2:2f41\"],\"containerized\":false,\"hostname\":\"caiji-165\",\"id\":\"ecd2091ebeb549d1a98835f858a296e9\"},\"@timestamp\":\"2023-10-09T03:14:21.973Z\",\"tags\":[\"bashhistory\"],\"hostipv4\":\"192.168.179.165\"}");
+
+        List<OriginLogMessage> list = logList.stream()
+                .map(log -> new OriginLogMessage(log, "host"))
+                .collect(Collectors.toList());
+
+        kafkaProducerService.AsyncSendLogsToKafka(list);
+    }
+
 
     private static List<String> generateRandomLogs(int count) {
         List<String> logs = new ArrayList<>();

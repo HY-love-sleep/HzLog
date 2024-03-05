@@ -39,7 +39,7 @@ public class KafkaProducerService {
     }
 
     // 异步发送
-    public void AsyncSendStudentsToKafka(List<OriginLogMessage> logs) {
+    public void AsyncSendLogsToKafka(List<OriginLogMessage> logs) {
         CompletableFuture[] futures = new CompletableFuture[logs.size()];
         ObjectMapper objectMapper = new ObjectMapper();
         for (int i = 0; i < logs.size(); i++) {
@@ -57,6 +57,7 @@ public class KafkaProducerService {
         CompletableFuture<Void> allOf = CompletableFuture.allOf(futures);
         try {
             allOf.get();
+            log.info("消息发送成功！");
         } catch (InterruptedException | ExecutionException e) {
             log.error("kafka 发送消息失败：{}", e.getMessage());
         }

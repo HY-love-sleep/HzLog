@@ -5,6 +5,7 @@ import com.hy.factory.OriginLogMessageFactory;
 import com.hy.factory.LogThreadFactory;
 import com.hy.handler.LogFilterHandler;
 import com.lmax.disruptor.BlockingWaitStrategy;
+import com.lmax.disruptor.WorkHandler;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Arrays;
 
 /**
  * Description: 原始日志存放到disruptor进行处理
@@ -21,6 +23,7 @@ import javax.annotation.PostConstruct;
 @Component
 @Slf4j
 public class OriginLogDisruptor {
+    private static final int CONSUMER_NUMS = 5;
     private Disruptor<OriginLogMessage> disruptor;
 
     public OriginLogDisruptor() {
@@ -40,7 +43,9 @@ public class OriginLogDisruptor {
                 new BlockingWaitStrategy()
         );
 
-        this.disruptor.handleEventsWith(filterHandler);
+        WorkHandler<OriginLogMessage>[] logFilterHandlers = new LogFilterHandler[CONSUMER_NUMS];
+        Arrays.fill(logFilterHandlers, filterHandler);
+        this.disruptor.handleEventsWithWorkerPool(logFilterHandlers);
         this.disruptor.start();
         log.info("OriginLogDisruptor init success!");
     }
