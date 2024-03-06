@@ -2,11 +2,13 @@ package com.hy.service.strategy;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hy.common.LogType;
 import com.hy.entity.common.BaseLog;
+import com.hy.entity.common.Event;
 import com.hy.entity.host.HostLogMessage;
 import com.hy.entity.common.OriginLogMessage;
 import com.hy.service.LogCleanTemplate;
@@ -14,9 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static sun.reflect.misc.FieldUtil.getField;
 
@@ -28,7 +28,7 @@ import static sun.reflect.misc.FieldUtil.getField;
 @Component
 @Slf4j
 public class HostLogCleanStrategy extends LogCleanTemplate implements LogCleanStrategy {
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public HostLogMessage clean(OriginLogMessage originLog) throws Exception {
@@ -56,15 +56,15 @@ public class HostLogCleanStrategy extends LogCleanTemplate implements LogCleanSt
         log.info("jsonLog: {}", jsonLog);
         // 能够直接映射的部分转换为实体类
         HostLogMessage hostLogMessage = objectMapper.treeToValue(jsonLog, HostLogMessage.class);
-
+        // 固定字段的手动Set， Event是写死的
+        hostLogMessage.setEvent(new Event());
         // 无法直接映射的部分通过自定义Map来映射
         HostLogMessage res = mapJsonToEntity(jsonLog, hostLogMessage);
-
         return objectMapper.convertValue(res, entityClass);
     }
 
     // 定义原始日志与标准日志间的字段映射， 这个map的定义后续由前端页面配置
-    private static <T> Map<String, String> getFieldMappings() {
+    private static Map<String, String> getFieldMappings() {
         // 添加字段映射关系 k-实体类字段， v-json字段
         Map<String, String> fieldMappings = new HashMap<>();
         fieldMappings.put("@timestamp", "timestamp");
@@ -72,7 +72,7 @@ public class HostLogCleanStrategy extends LogCleanTemplate implements LogCleanSt
         return fieldMappings;
     }
 
-    public static <T> T mapJsonToEntity(JsonNode jsonNode, T entity) {
+    public <T> T mapJsonToEntity(JsonNode jsonNode, T entity) {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {

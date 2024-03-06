@@ -43,12 +43,7 @@ public class LogSenderHandler implements WorkHandler<LogEvent> {
     public void onEvent(LogEvent logEvent) throws Exception {
         IndexRequest indexRequest = new IndexRequest(index);
         String messageString = objectMapper.writeValueAsString(logEvent.getLog());
-        Map<String, Object> document = new HashMap<>();
-        String timestamp = Optional.ofNullable(logEvent.getLog().getTimestamp())
-                .orElse(String.valueOf(Instant.now().toEpochMilli()));
-        document.put("@timestamp", timestamp);
-        document.put("message", messageString);
-        indexRequest.source(document, XContentType.JSON);
+        indexRequest.source(messageString, XContentType.JSON);
         String result = "";
         try {
             // 发送清洗好的日志到es指定索引中
