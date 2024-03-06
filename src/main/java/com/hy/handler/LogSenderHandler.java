@@ -14,10 +14,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Description: 发送日志到es
@@ -43,7 +42,9 @@ public class LogSenderHandler implements WorkHandler<LogEvent> {
     public void onEvent(LogEvent logEvent) throws Exception {
         IndexRequest indexRequest = new IndexRequest(index);
         String messageString = objectMapper.writeValueAsString(logEvent.getLog());
-        indexRequest.source(messageString, XContentType.JSON);
+        String indexedMessageString = "{\"@timestamp\":\"" + zeroZoneTime() + "\"," + messageString.substring(1);
+
+        indexRequest.source(indexedMessageString, XContentType.JSON);
         String result = "";
         try {
             // 发送清洗好的日志到es指定索引中
@@ -53,5 +54,11 @@ public class LogSenderHandler implements WorkHandler<LogEvent> {
         } catch (IOException e) {
             log.error("写入es索引失败， 索引{}, 响应状态:{}, error:{}", index, result, e.getMessage());
         }
+    }
+
+    public static String zeroZoneTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+08:00"));
+        return dateFormat.format(new Date());
     }
 }
