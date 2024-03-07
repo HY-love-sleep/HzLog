@@ -5,16 +5,17 @@
 以kafka接收为例：
 
 1. kafka消费端接收消息， 将其直接扔进OriginLogDisruptor的环形数组里；
-
 2. OriginLogDisruptor的消费者工作池消费ringbuffer中的原始日志， 进行清洗的操作；
-
 3. LogFilterHandler是OriginLogDisruptor中的消费者， 他对于获取到的每个原始日志， 通过策略模式调用合适的日志清洗业务方法去清洗， 然后将清洗好的日志put到CleanedLogDisruptor中；
-
 4. LogSenderHandler是CleanedLogDisruptor中的消费者，对于获取到的每个LogEvent， 将其发送到Es指定索引中；
 
-   
 
-   
+
+- 对于新接入的日志， 接收和发送日志流程是通用的， 只需要更改配置文件中kafka、syslog、es的相关配置；
+
+- 对于日志清洗部分，对于每一种新接入的日志， 需要继承LogCleanTemplate以及实现LogCleanStrategy，LogCleanTemplate固定了清洗的流程：打印-解析json-转实体类；LogCleanStrategy为LogFilterHandler封装了一个统一的调用接口；
+
+  不同类型的日志，如果不是json格式的， 在解析json的过程中需要自定义正则表达式；是json格式的， 需要对字段进行映射， 这段逻辑也需要根据映射Map进行重写；
 
 ### 2、功能点
 
@@ -22,7 +23,7 @@
 
    - 日志清洗的流程， 基本是固定的， 所以定义了一个模版方法， 所有的日志清洗都经历以下步骤：
 
-     - 打印原始日志；
+     - 打印原始日志【可选】；
 
      - 将原始日志转为JSON格式；
 
@@ -99,17 +100,6 @@
 经测试， 每秒发送8000条syslog消息时， UDP模式下能保证基本不丢消息；
 
 
-
-```
-curl -X GET "172.16.21.67:9200/hostaudit-hy/_search" -H 'Content-Type: application/json' -d'
-{
-  "query": {
-    "match_all": {}
-  }
-}
-'
-
-```
 
 
 
