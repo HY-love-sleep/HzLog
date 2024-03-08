@@ -51,7 +51,7 @@ public class SysLogReceivedMessageService {
 
             private void processEvent(SyslogServerEventIF syslogServerEventIF) {
                 String originMessage = syslogServerEventIF.getMessage().substring(syslogServerEventIF.getMessage().indexOf("DBSEC"));
-                log.info("sysLog:{}", originMessage);
+                log.debug("sysLog:{}", originMessage);
                 disruptor.getDisruptor().publishEvent((event, sequence) -> {
                     event.setOriginLogMessage(originMessage);
                     event.setLogType("database");

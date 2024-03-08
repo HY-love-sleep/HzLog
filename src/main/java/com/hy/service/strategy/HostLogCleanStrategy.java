@@ -15,10 +15,8 @@ import com.hy.service.LogCleanTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
-import static sun.reflect.misc.FieldUtil.getField;
 
 /**
  * Description: 主机日志清洗策略
@@ -53,7 +51,7 @@ public class HostLogCleanStrategy extends LogCleanTemplate implements LogCleanSt
             log.error("日志类型不匹配， entityClass：{}", entityClass);
             return null;
         }
-        log.info("jsonLog: {}", jsonLog);
+        log.debug("jsonLog: {}", jsonLog);
         // 能够直接映射的部分转换为实体类
         HostLogMessage hostLogMessage = objectMapper.treeToValue(jsonLog, HostLogMessage.class);
         // 固定字段的手动Set， Event是写死的

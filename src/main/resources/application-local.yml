@@ -33,7 +33,7 @@ spring:
 #    index: hostaudit-hy
 
   inner:
-    consumer: true  # 发送kafka消息时将其改为 false
+    consumer: false  # 发送kafka消息时将其改为 false
 
 syslog:
   producer:

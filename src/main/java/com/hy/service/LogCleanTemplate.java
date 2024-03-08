@@ -16,7 +16,7 @@ public abstract class LogCleanTemplate {
     // 1. 打印原始日志
     protected void printRawLog(OriginLogMessage rawLog, boolean shouldPrint) {
         if (shouldPrint) {
-            log.info("origin log: {}", rawLog.getOriginLogMessage());
+            log.debug("origin log: {}", rawLog.getOriginLogMessage());
         }
     }
 
